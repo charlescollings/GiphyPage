@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
     // populate buttons array 
-    var drummers = ["John Bonham", "Neil Pert", "Keith Moon", "Dave Grohl", "Carter Buford", "Lars Ulrich"];
+    var drummers = ["John Bonham", "Neil Pert", "Keith Moon", "Dave Grohl", "Gene Krupa", "Lars Ulrich"];
     var searchTerm = "";
 
     for (let i=0; i < drummers.length; i++) {
@@ -18,6 +18,9 @@ $( document ).ready(function() {
 
         $(a).on("click", function(event) {
             event.preventDefault();
+
+            $("#pics").empty();
+
             searchTerm = drummers[i];
             console.log(searchTerm);
 
@@ -27,13 +30,35 @@ $( document ).ready(function() {
               url: queryURL,
               method: 'GET'
             }).then(function(response) {
-              console.log(response);
-              $("#pics").append(response);
-            });
 
-          });
+                    // Retrieving the URL for the image
+                    for (let j=0; j < response.data.length; j++)    {
+
+                        var imgURL = response.data[j].images.fixed_height_still.url;
+                        var gifURL = response.data[j].images.fixed_height.url;
+
+                        // Creating an element to hold the image
+                        var image = $("<img>").attr("src", imgURL);
+                        var gif = $("<img>").attr("src", gifURL);
+
+
+                        $("#pics").append(image);
+                        $("#pics").append(response.data[j].rating);
+
+                        $(image).click(function() {
+                            console.log("clicked");
+                            // $("#pics").empty();
+                            // $("#pics").append(gif);
+                            // $(image).replaceWith();
+                        })
+
+                    };
+                });
+            
+
+        });
 
     };
 
 
-})
+});
