@@ -105,16 +105,39 @@ var searchTerm = "";
                 for (let j=0; j < response.data.length; j++)    {
 
                     var imgURL = response.data[j].images.fixed_height_still.url;
-                    // var gifURL = response.data[j].images.fixed_height.url;
+                    var gifURL = response.data[j].images.fixed_height.url;
 
                     // Creating an element to hold the image
                     var image = $("<img>").attr("src", imgURL);
-                    // var gif = $("<img>").attr("src", gifURL);
+                    // image.attr("name", drummers[j]);
+                    console.log(image);
+                    // if image clicked then use setAttr to change src to gifURL
+
+                    var gif = $("<img>").attr("src", gifURL);
+
+                    var gifHolder = [image, gif];
 
                     $("#pics").append(image);
                     // $("#pics").append(gif);
                     $("#pics").append(response.data[j].rating);
+
+
+                    // $(image).on("click", function()  {
+                    //     image.setAttribute("src", gifURL)
+                        // selectedGIF = ($(event.target));
+         
+
+                        
+                        // selectedGIF.empty();
+                        // $(selectedGIF).append(gif[j]);
+                    // });
                 }
+
+
+                // user clicks image
+                // event.target to get clicked image?
+                // replace image with new animated gif
+                
             })
     }
 
@@ -156,9 +179,9 @@ var searchTerm = "";
     });
     
 //    user clicks image
-    $("#pics").on("click", function(event)  {
-        animateGIF(event);
-    });
+    // $("#pics").on("click", function(event)  {
+    //     animateGIF(event);
+    // });
 
 
 

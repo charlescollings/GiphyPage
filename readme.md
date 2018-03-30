@@ -1,0 +1,1 @@
+This web app is designed to show the user a set of buttons, each with the name of a different drummer. User can click on the button to see 10 still GIFs of that drummer. Then, if user clicks on a GIF it will play the GIF.
