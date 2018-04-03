@@ -57,6 +57,12 @@ $(document).ready(function() {
           }
     };
 
+
+    function addButton() {
+        var topic = $(".topic-input").val().trim();
+        drummers.push(topic);
+    }
+
     // events
 
     // page load
@@ -65,5 +71,10 @@ $(document).ready(function() {
     $(document).on("click", ".drummer", chooseDrummer);
     // Clicking Image Event
     $(document).on("click", ".gif", imageState);
-
-})
+    //Adding Button Event
+    $(".add-topic").on("click", function(event){
+        event.preventDefault();
+        addButton();
+        pageLoad();
+    });
+});
