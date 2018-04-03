@@ -1,79 +1,9 @@
-// $( document ).ready(function() {
-// // 
-// //  // populate buttons array 
-// var drummers = ["John Bonham", "Ringo Star", "Keith Moon", "Dave Grohl", "Gene Krupa", "Lars Ulrich", "Buddy Rich", "Neil Peart", "Stewert Copeland"];
-// 
-// //  var searchTerm = "";
-// 
-//   for (var i=0; i < drummers.length; i++) {
-//     
-//       var a = $("<button>");
-//       // Adding a class
-//       a.addClass("drummer");
-//       // Adding a data-attribute with a value of the drummer at index i
-//       a.attr("data-name", drummers[i]);
-//       // Providing the button's text with a value of the drummer at index i
-//       a.text(drummers[i]);
-//       // Adding the button to the HTML
-//       console.log(a)
-//       $("#buttons").append(a);
-//   };
-// 
-//         $(a).on("click", function(event) {
-//             event.preventDefault();
-// 
-//             $("#pics").empty();
-// 
-//             searchTerm = drummers[i];
-//             console.log(searchTerm);
-// 
-//             var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=dc6zaTOxFJmzC&limit=10";
-// 
-//             $.ajax({
-//               url: queryURL,
-//               method: 'GET'
-//             }).then(function(response) {
-// 
-//                     // Retrieving the URL for the image
-//                     for (let j=0; j < response.data.length; j++)    {
-// 
-//                         var imgURL = response.data[j].images.fixed_height_still.url;
-//                         var gifURL = response.data[j].images.fixed_height.url;
-// 
-//                         // Creating an element to hold the image
-//                         var image = $("<img>").attr("src", imgURL);
-//                         var gif = $("<img>").attr("src", gifURL);
-// 
-// 
-//                         $("#pics").append(image);
-//                         $("#pics").append(response.data[j].rating);
-// 
-//                         $(image).on ("click", function() {
-//                             console.log("clicked");
-//                             // $("#pics").empty();
-//                             // $("#pics").append(gif);
-//                             // $(image).replaceWith();
-//                         })
-// 
-//                     };
-//                 });
-//             
-// 
-//         });
-// 
-//     };
-// 
-// 
-// });
-
-
-
 $(document).ready(function() {
 // Variables
 var drummers = ["John Bonham", "Ringo Star", "Keith Moon", "Dave Grohl", "Gene Krupa", "Lars Ulrich", "Buddy Rich", "Neil Peart", "Stewert Copeland"];
-var searchTerm = "";
 
-      
+function pageLoad() {
+    $("#buttons").empty();
     for (var i=0; i < drummers.length; i++) {
         var a = $("<button>");
         // Adding a class
@@ -85,61 +15,53 @@ var searchTerm = "";
         // Adding the button to the HTML
         $("#buttons").append(a);
     };
+};
 
-// functions
-    function chooseDrummer(event)    {
-         
-         event.preventDefault();
-         searchTerm = ($(event.target).attr("data-name"));
-         // console.log(searchTerm);
-         $("#pics").empty();
+function chooseDrummer()    {
+    let drummerChosen = $(this).attr("data-name");
+    console.log(this);
 
-         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=dc6zaTOxFJmzC&limit=10";
- 
-         $.ajax({
-            url: queryURL,
-            method: 'GET'
-          }).then(function(response) {
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + drummerChosen + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-                // Retrieving the URL for the image
-                for (let j=0; j < response.data.length; j++)    {
+    $.ajax({
+        url: queryURL,
+        method: 'GET'
+        }).then(function(response) {
+            var result = response.data;
+            // Retrieving the URL for the image
+                for (let j=0; j < result.length; j++)    {
+                    var gifDiv = $("<div class='item'>");
+                    var rating = result[j].rating;
+                    var p = $("<p>").text("Rating: " + rating);
+                    var drummerImage = $("<img>");
+                    drummerImage.addClass("gif");
+                    drummerImage.attr("src", result[j].images.fixed_height_still.url);
+                    drummerImage.attr("data-still", result[j].images.fixed_height_still.url);
+                    drummerImage.attr("data-animate", result[j].images.fixed_height.url);
+                    drummerImage.attr("data-state", "still");
+                    gifDiv.append(p);
+                    gifDiv.append(drummerImage);
+                    $("#pics").prepend(gifDiv);
+                }; 
+            });
+}
 
-                    var imgURL = response.data[j].images.fixed_height_still.url;
-                    var gifURL = response.data[j].images.fixed_height.url;
-
-                    // Creating an element to hold the image
-                    var image = $("<img>").attr("src", imgURL);
-                    // image.attr("name", drummers[j]);
-                    console.log(image);
-                    // if image clicked then use setAttr to change src to gifURL
-
-                    var gif = $("<img>").attr("src", gifURL);
-
-                    var gifHolder = [image, gif];
-
-                    $("#pics").append(image);
-                    // $("#pics").append(gif);
-                    $("#pics").append(response.data[j].rating);
-
-
-                    // $(image).on("click", function()  {
-                    //     image.setAttribute("src", gifURL)
-                        // selectedGIF = ($(event.target));
-         
-
-                        
-                        // selectedGIF.empty();
-                        // $(selectedGIF).append(gif[j]);
-                    // });
-                }
+function imageState() {
+    var state = $(this).attr("data-state");
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      }
+};
 
 
-                // user clicks image
-                // event.target to get clicked image?
-                // replace image with new animated gif
-                
-            })
-    }
+
+
+
+
 
     function animateGIF(event)  {
         event.preventDefault();
@@ -173,16 +95,23 @@ var searchTerm = "";
     };
 
 // events
+
+// page load
+    pageLoad();
 //    user clicks button
-    $("#buttons").on("click", function(event)  {
-        chooseDrummer(event);
-    });
+    $(document).on("click", ".drummer", chooseDrummer);
+    // $("#buttons").on("click", function(event)  {
+    //     chooseDrummer(event);
+    // });
     
 //    user clicks image
     // $("#pics").on("click", function(event)  {
     //     animateGIF(event);
     // });
 
+
+// Clicking Image Event
+    $(document).on("click", ".gif", imageState);
 
 
 
